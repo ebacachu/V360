@@ -34,9 +34,9 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": -0.04105876923476437,
-          "pitch": 0.2350443328923859,
-          "rotation": 3.141592653589793,
+          "yaw": -0.027751371415233095,
+          "pitch": -0.13473179198426877,
+          "rotation": 6.283185307179586,
           "target": "1-presa"
         }
       ],
@@ -76,9 +76,9 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": 0.28056960724871693,
-          "pitch": 0.5541572444544673,
-          "rotation": 0,
+          "yaw": 0.039143384161500094,
+          "pitch": -0.1536723358002412,
+          "rotation": 6.283185307179586,
           "target": "0-embalse"
         }
       ],
@@ -89,7 +89,7 @@ var APP_DATA = {
   "settings": {
     "mouseViewMode": "drag",
     "autorotateEnabled": false,
-    "fullscreenButton": false,
+    "fullscreenButton": true,
     "viewControlButtons": false
   }
 };

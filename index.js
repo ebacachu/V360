@@ -3,7 +3,9 @@
 // Coordenadas de ejemplo (cámbialas por las reales cuando las tengas)
 const sceneLocations = {
   "Embalse": { lat: 42.560000, lng: -3.450000 },
-  "Presa":   { lat: 42.562500, lng: -3.455000 }
+  "Presa":   { lat: 42.562500, lng: -3.456000 },
+  "Presa aguas abajo": { lat: 42.560000, lng: -3.457000 },
+  "Presa paramento": { lat: 42.560000, lng: -3.458000 }
 };
 
 function getSceneName(scene) {

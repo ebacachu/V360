@@ -1,120 +1,57 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>V360</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-  <style> @-ms-viewport { width: device-width; } </style>
+<meta charset="utf-8">
+<title>V360 con Mapa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Estilos base -->
-  <link rel="stylesheet" href="vendor/reset.min.css">
-  <link rel="stylesheet" href="style.css">
+<!-- Marzipano CSS -->
+<link rel="stylesheet" href="style.css">
 
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 </head>
-<body class="multiple-scenes ">
+<body>
 
-  <!-- Visor -->
-  <div id="pano"></div>
+<div id="pano"></div>
 
-  <!-- Pie de página con enlace -->
-  <div id="footer">
-    <a href="https://www.linkedin.com/in/eduardo-bueno-0437a21a7/" target="_blank" rel="noopener">
-      LinkedIn
-    </a>
-  </div>
+<!-- Mapa (picture-in-picture) -->
+<div id="map" aria-label="Mapa de posiciones" tabindex="0"></div>
+<button id="toggleMap" type="button" title="Mostrar/Ocultar mapa">Mapa</button>
 
-  <style>
-    #footer {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 1px;
-      font-family: sans-serif;
-      z-index: 1000;
-    }
-    #footer a { color: white; text-decoration: none; }
-    #footer a:hover { text-decoration: underline; }
+<style>
+  #map{
+    position: fixed;
+    bottom: 12px; right: 12px;
+    width: 320px; height: 220px;
+    z-index: 1000;
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,.25);
+    border: 1px solid rgba(0,0,0,.15);
+    background: #f8f9fa;
+  }
+  #toggleMap{
+    position: fixed;
+    bottom: 12px; right: 12px;
+    transform: translateY(calc(100% + 8px));
+    z-index: 1001;
+    padding: 8px 12px; border-radius: 10px; border: 0;
+    background: rgba(0,0,0,.55); color: #fff; cursor: pointer;
+  }
+  #toggleMap:hover{ background: rgba(0,0,0,.75); }
+  @media (max-width: 640px){
+    #map{ width: 260px; height: 180px; }
+  }
+</style>
 
-    /* Mapa flotante (picture-in-picture) */
-    #map {
-      width: 300px; height: 200px;
-      position: fixed; bottom: 10px; left: 10px;
-      z-index: 1000; border-radius: 8px; overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.25);
-      background: #fff;
-    }
+<!-- Scripts principales -->
+<script src="marzipano.js"></script>
+<script src="data.js"></script>
+<script src="index.js"></script>
 
-    @media (max-width: 600px) {
-      #map { width: 220px; height: 150px; }
-    }
-  </style>
-
-  <!-- Lista de escenas -->
-  <div id="sceneList">
-    <ul class="scenes">
-      <a href="javascript:void(0)" class="scene" data-id="0-embalse"><li class="text">Embalse</li></a>
-      <a href="javascript:void(0)" class="scene" data-id="1-presa"><li class="text">Presa</li></a>
-      <a href="javascript:void(0)" class="scene" data-id="2-presa-aguas-abajo"><li class="text">Presa aguas abajo</li></a>
-      <a href="javascript:void(0)" class="scene" data-id="3-presa-paramento"><li class="text">Presa paramento</li></a>
-    </ul>
-  </div>
-
-  <div id="titleBar">
-    <h1 class="sceneName"></h1>
-  </div>
-
-  <!-- Controles -->
-  <a href="javascript:void(0)" id="autorotateToggle">
-    <img class="icon off" src="img/play.png">
-    <img class="icon on" src="img/pause.png">
-  </a>
-
-  <a href="javascript:void(0)" id="fullscreenToggle">
-    <img class="icon off" src="img/fullscreen.png">
-    <img class="icon on" src="img/windowed.png">
-  </a>
-
-  <a href="javascript:void(0)" id="sceneListToggle">
-    <img class="icon off" src="img/expand.png">
-    <img class="icon on" src="img/collapse.png">
-  </a>
-
-  <a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
-    <img class="icon" src="img/up.png">
-  </a>
-  <a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2">
-    <img class="icon" src="img/down.png">
-  </a>
-  <a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3">
-    <img class="icon" src="img/left.png">
-  </a>
-  <a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4">
-    <img class="icon" src="img/right.png">
-  </a>
-  <a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5">
-    <img class="icon" src="img/plus.png">
-  </a>
-  <a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6">
-    <img class="icon" src="img/minus.png">
-  </a>
-
-  <!-- Vendor scripts -->
-  <script src="vendor/screenfull.min.js"></script>
-  <script src="vendor/bowser.min.js"></script>
-  <script src="vendor/marzipano.js"></script>
-
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-  <!-- Datos y lógica -->
-  <script src="data.js"></script>
-  <script src="index.js"></script>
 </body>
 </html>
